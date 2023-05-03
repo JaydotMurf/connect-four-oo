@@ -1,58 +1,60 @@
-class Board {
-  constructor(WIDTH = 7, HEIGHT = 6) {
-    this.WIDTH = WIDTH;
-    this.HEIGHT = HEIGHT;
-    this.board = [];
-    this.activePlayer = 1;
-  }
-  getCells() {
-    for (let y = 0; y < this.HEIGHT; y++) {
-      this.board.push(Array(this.WIDTH).fill(null));
+document.addEventListener('DOMContentLoaded', () => {
+  class Board {
+    constructor(WIDTH = 7, HEIGHT = 6) {
+      this.WIDTH = WIDTH;
+      this.HEIGHT = HEIGHT;
+      this.board = [];
+      this.activePlayer = 1;
     }
-    return this.board;
-  }
-  getActivePlayer() {
-    return this.activePlayer;
-  }
-  updateActivePlayer() {
-    this.activePlayer = this.getActivePlayer() === 1 ? 2 : 1;
-  }
-}
-
-class Game extends Board {
-  constructor(WIDTH, HEIGHT) {
-    super(WIDTH, HEIGHT);
-    this.htmlBoard = document.getElementById('board');
-    this.getCells();
-  }
-  makeHtmlBoard() {
-    this.top = document.createElement('tr');
-    this.top.setAttribute('id', 'column-top');
-    // this.top.addEventListener('click', handleClick);
-
-    for (let x = 0; x < this.WIDTH; x++) {
-      this.headCell = document.createElement('td');
-      this.headCell.setAttribute('id', x);
-      this.top.append(this.headCell);
+    getCells() {
+      for (let y = 0; y < this.HEIGHT; y++) {
+        this.board.push(Array(this.WIDTH).fill(null));
+      }
+      return this.board;
     }
+    getActivePlayer() {
+      return this.activePlayer;
+    }
+    updateActivePlayer() {
+      this.activePlayer = this.getActivePlayer() === 1 ? 2 : 1;
+    }
+  }
 
-    this.htmlBoard.append(this.top);
-
-    for (let y = 0; y < this.HEIGHT; y++) {
-      this.row = document.createElement('tr');
+  class Game extends Board {
+    constructor(WIDTH, HEIGHT) {
+      super(WIDTH, HEIGHT);
+      this.htmlBoard = document.getElementById('board');
+      this.getCells();
+    }
+    makeHtmlBoard() {
+      this.top = document.createElement('tr');
+      this.top.setAttribute('id', 'column-top');
+      // this.top.addEventListener('click', handleClick);
 
       for (let x = 0; x < this.WIDTH; x++) {
-        this.cell = document.createElement('td');
-        this.cell.setAttribute('id', `${y}-${x}`);
-        this.row.append(this.cell);
+        this.headCell = document.createElement('td');
+        this.headCell.setAttribute('id', x);
+        this.top.append(this.headCell);
       }
-      this.htmlBoard.append(this.row);
+
+      this.htmlBoard.append(this.top);
+
+      for (let y = 0; y < this.HEIGHT; y++) {
+        this.row = document.createElement('tr');
+
+        for (let x = 0; x < this.WIDTH; x++) {
+          this.cell = document.createElement('td');
+          this.cell.setAttribute('id', `${y}-${x}`);
+          this.row.append(this.cell);
+        }
+        this.htmlBoard.append(this.row);
+      }
     }
   }
-}
 
-const myGame = new Game();
-console.log(myGame.makeHtmlBoard());
+  const myGame = new Game();
+  console.log(myGame.makeHtmlBoard());
+});
 
 // function findSpotForCol(x) {
 //   for (let y = HEIGHT - 1; y >= 0; y--) {
