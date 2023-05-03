@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
       this.board = [];
       this.activePlayer = 1;
     }
-    getCells() {
+    createCells() {
       for (let y = 0; y < this.HEIGHT; y++) {
         this.board.push(Array(this.WIDTH).fill(null));
       }
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     constructor(WIDTH, HEIGHT) {
       super(WIDTH, HEIGHT);
       this.htmlBoard = document.getElementById('board');
-      this.getCells();
+      this.createCells();
     }
     makeHtmlBoard() {
       this.top = document.createElement('tr');
