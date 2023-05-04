@@ -24,12 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
     constructor(WIDTH, HEIGHT) {
       super(WIDTH, HEIGHT);
       this.htmlBoard = document.getElementById('board');
+      this.handleClick = this.handleClick.bind(this);
       this.createCells();
     }
-    makeHtmlBoard() {
+    start() {
       this.top = document.createElement('tr');
       this.top.setAttribute('id', 'column-top');
-      // this.top.addEventListener('click', handleClick);
+      this.top.addEventListener('click', this.handleClick);
 
       for (let x = 0; x < this.WIDTH; x++) {
         this.headCell = document.createElement('td');
@@ -50,30 +51,48 @@ document.addEventListener('DOMContentLoaded', () => {
         this.htmlBoard.append(this.row);
       }
     }
+    handleClick(evt) {
+      this.x = +evt.target.id;
+      this.y = this.findSpaceInColumn(this.x);
+      if (this.y === null) {
+        alert(`Column full!`);
+        return;
+      }
+      this.board[this.y][this.x] = this.activePlayer;
+      this.placePieceInGame(this.y, this.x);
+      this.activePlayer = this.activePlayer === 1 ? 2 : 1;
+    }
+    findSpaceInColumn(x) {
+      for (let y = this.HEIGHT - 1; y >= 0; y--) {
+        if (!this.board[y][x]) {
+          return y;
+        }
+      }
+      return null;
+    }
+    placePieceInGame(y, x) {
+      this.piece = document.createElement('div');
+      this.piece.classList.add('piece');
+      this.piece.classList.add(`p${this.activePlayer}`);
+      this.piece.style.top = -50 * (y + 2);
+      this.spot = document.getElementById(`${y}-${x}`);
+      this.spot.append(this.piece);
+    }
   }
 
   const myGame = new Game();
-  console.log(myGame.makeHtmlBoard());
+  myGame.start();
 });
 
-// function findSpotForCol(x) {
-//   for (let y = HEIGHT - 1; y >= 0; y--) {
-//     if (!board[y][x]) {
-//       return y;
-//     }
-//   }
-//   return null;
+// if (checkForWin()) {
+//   return endGame(`Player ${currPlayer} won!`);
 // }
 
-// function placeInTable(y, x) {
-//   const piece = document.createElement('div');
-//   piece.classList.add('piece');
-//   piece.classList.add(`p${currPlayer}`);
-//   piece.style.top = -50 * (y + 2);
-
-//   const spot = document.getElementById(`${y}-${x}`);
-//   spot.append(piece);
+// if (board.every((row) => row.every((cell) => cell))) {
+//   return endGame('Tie!');
 // }
+
+// ! ------
 
 // function endGame(msg) {
 //   alert(msg);
@@ -149,6 +168,3 @@ document.addEventListener('DOMContentLoaded', () => {
 //     }
 //   }
 // }
-
-// makeBoard();
-// makeHtmlBoard();
