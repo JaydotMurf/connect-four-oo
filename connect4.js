@@ -25,12 +25,15 @@ document.addEventListener('DOMContentLoaded', () => {
       super(WIDTH, HEIGHT);
       this.htmlBoard = document.getElementById('board');
       this.handleClick = this.handleClick.bind(this);
+      this.resetGame = this.resetGame.bind(this);
+      this.resetButton = document.getElementById('button-17');
       this.createCells();
     }
     start() {
       this.top = document.createElement('tr');
       this.top.setAttribute('id', 'column-top');
       this.top.addEventListener('click', this.handleClick);
+      this.resetButton.addEventListener('click', this.resetGame);
 
       for (let x = 0; x < this.WIDTH; x++) {
         this.headCell = document.createElement('td');
@@ -137,6 +140,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     endGame(msg) {
       alert(msg);
+    }
+    resetGame() {
+      this.board.forEach((row) => row.fill(null));
+      this.gamePieces = document.querySelectorAll('.piece');
+      this.gamePieces.forEach((piece) => piece.remove());
+      this.activePlayer = 1;
     }
   }
 
