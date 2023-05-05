@@ -65,11 +65,22 @@ document.addEventListener('DOMContentLoaded', () => {
       this.placePieceInGame(this.y, this.x);
 
       this.isWinningBoard = this.checkForWin();
-      if (this.isWinningBoard)
-        return this.endGame(`Player ${this.activePlayer} won!`);
+      if (this.isWinningBoard) {
+        setTimeout(() => {
+          this.endGame(`Player ${this.activePlayer} won!`);
+          this.resetGame();
+        }, 150);
+        return;
+      }
 
       this.isTiedGame = this.board.every((row) => row.every((cell) => cell));
-      if (this.isTiedGame) return this.endGame(`Game Tied!`);
+      if (this.isTiedGame) {
+        setTimeout(() => {
+          this.endGame(`Game Tied!`);
+          this.resetGame();
+        }, 150);
+        return;
+      }
 
       this.activePlayer = this.activePlayer === 1 ? 2 : 1;
     }

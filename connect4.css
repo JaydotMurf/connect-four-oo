@@ -1,5 +1,9 @@
+body {
+  background-color: #a9a583;
+}
+
 .game {
-  height: 100vh;
+  height: 50vh;
   max-width: 800px;
   margin: 0 auto;
   display: flex;
