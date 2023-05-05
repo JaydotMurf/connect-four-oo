@@ -60,6 +60,14 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       this.board[this.y][this.x] = this.activePlayer;
       this.placePieceInGame(this.y, this.x);
+
+      this.isWinningBoard = this.checkForWin();
+      if (this.isWinningBoard)
+        return this.endGame(`Player ${this.activePlayer} won!`);
+
+      this.isTiedGame = this.board.every((row) => row.every((cell) => cell));
+      if (this.isTiedGame) return this.endGame(`Game Tied!`);
+
       this.activePlayer = this.activePlayer === 1 ? 2 : 1;
     }
     findSpaceInColumn(x) {
@@ -78,93 +86,60 @@ document.addEventListener('DOMContentLoaded', () => {
       this.spot = document.getElementById(`${y}-${x}`);
       this.spot.append(this.piece);
     }
+    checkForWin() {
+      for (let y = 0; y < this.HEIGHT; y++) {
+        for (let x = 0; x < this.WIDTH; x++) {
+          this.horiz = [
+            [y, x],
+            [y, x + 1],
+            [y, x + 2],
+            [y, x + 3],
+          ];
+          this.vert = [
+            [y, x],
+            [y + 1, x],
+            [y + 2, x],
+            [y + 3, x],
+          ];
+          this.diagDR = [
+            [y, x],
+            [y + 1, x + 1],
+            [y + 2, x + 2],
+            [y + 3, x + 3],
+          ];
+          this.diagDL = [
+            [y, x],
+            [y + 1, x - 1],
+            [y + 2, x - 2],
+            [y + 3, x - 3],
+          ];
+
+          if (
+            this._win(this.horiz) ||
+            this._win(this.vert) ||
+            this._win(this.diagDR) ||
+            this._win(this.diagDL)
+          ) {
+            return true;
+          }
+        }
+      }
+    }
+    _win(cells) {
+      return cells.every(
+        ([y, x]) =>
+          y >= 0 &&
+          y < this.HEIGHT &&
+          x >= 0 &&
+          x < this.WIDTH &&
+          this.board[y][x] === this.activePlayer
+      );
+    }
+    endGame(msg) {
+      alert(msg);
+    }
   }
 
   const myGame = new Game();
   myGame.start();
 });
-
-// if (checkForWin()) {
-//   return endGame(`Player ${currPlayer} won!`);
-// }
-
-// if (board.every((row) => row.every((cell) => cell))) {
-//   return endGame('Tie!');
-// }
-
-// ! ------
-
-// function endGame(msg) {
-//   alert(msg);
-// }
-
-// function handleClick(evt) {
-
-//   const x = +evt.target.id;
-
-//   const y = findSpotForCol(x);
-//   if (y === null) {
-//     return;
-//   }
-
-//   board[y][x] = currPlayer;
-//   placeInTable(y, x);
-
-//   if (checkForWin()) {
-//     return endGame(`Player ${currPlayer} won!`);
-//   }
-
-//   if (board.every((row) => row.every((cell) => cell))) {
-//     return endGame('Tie!');
-//   }
-
-//   currPlayer = currPlayer === 1 ? 2 : 1;
-// }
-
-// function checkForWin() {
-//   function _win(cells) {
-
-//     return cells.every(
-//       ([y, x]) =>
-//         y >= 0 &&
-//         y < HEIGHT &&
-//         x >= 0 &&
-//         x < WIDTH &&
-//         board[y][x] === currPlayer
-//     );
-//   }
-
-//   for (let y = 0; y < HEIGHT; y++) {
-//     for (let x = 0; x < WIDTH; x++) {
-
-//       const horiz = [
-//         [y, x],
-//         [y, x + 1],
-//         [y, x + 2],
-//         [y, x + 3],
-//       ];
-//       const vert = [
-//         [y, x],
-//         [y + 1, x],
-//         [y + 2, x],
-//         [y + 3, x],
-//       ];
-//       const diagDR = [
-//         [y, x],
-//         [y + 1, x + 1],
-//         [y + 2, x + 2],
-//         [y + 3, x + 3],
-//       ];
-//       const diagDL = [
-//         [y, x],
-//         [y + 1, x - 1],
-//         [y + 2, x - 2],
-//         [y + 3, x - 3],
-//       ];
-
-//       if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
-//         return true;
-//       }
-//     }
-//   }
-// }
