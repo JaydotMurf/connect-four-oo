@@ -1,35 +1,32 @@
 document.addEventListener('DOMContentLoaded', () => {
-  class Board {
-    constructor(WIDTH = 7, HEIGHT = 6) {
-      this.WIDTH = WIDTH;
-      this.HEIGHT = HEIGHT;
-      this.board = [];
-      this.activePlayer = 1;
-    }
+  const game = {
+    WIDTH: 7,
+    HEIGHT: 6,
+    board: [],
+    activePlayer: 1,
+
     createCells() {
       for (let y = 0; y < this.HEIGHT; y++) {
         this.board.push(Array(this.WIDTH).fill(null));
       }
       return this.board;
-    }
+    },
+
     getActivePlayer() {
       return this.activePlayer;
-    }
+    },
+
     updateActivePlayer() {
       this.activePlayer = this.getActivePlayer() === 1 ? 2 : 1;
-    }
-  }
+    },
 
-  class Game extends Board {
-    constructor(WIDTH, HEIGHT) {
-      super(WIDTH, HEIGHT);
+    start() {
       this.htmlBoard = document.getElementById('board');
       this.handleClick = this.handleClick.bind(this);
       this.resetGame = this.resetGame.bind(this);
       this.resetButton = document.getElementById('button-17');
       this.createCells();
-    }
-    start() {
+
       this.top = document.createElement('tr');
       this.top.setAttribute('id', 'column-top');
       this.top.addEventListener('click', this.handleClick);
@@ -53,7 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         this.htmlBoard.append(this.row);
       }
-    }
+    },
+
     handleClick(evt) {
       this.x = +evt.target.id;
       this.y = this.findSpaceInColumn(this.x);
@@ -82,8 +80,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      this.activePlayer = this.activePlayer === 1 ? 2 : 1;
-    }
+      this.updateActivePlayer();
+    },
+
     findSpaceInColumn(x) {
       for (let y = this.HEIGHT - 1; y >= 0; y--) {
         if (!this.board[y][x]) {
@@ -91,7 +90,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
       return null;
-    }
+    },
+
     placePieceInGame(y, x) {
       this.piece = document.createElement('div');
       this.piece.classList.add('piece');
@@ -99,7 +99,8 @@ document.addEventListener('DOMContentLoaded', () => {
       this.piece.style.top = -50 * (y + 2);
       this.spot = document.getElementById(`${y}-${x}`);
       this.spot.append(this.piece);
-    }
+    },
+
     checkForWin() {
       for (let y = 0; y < this.HEIGHT; y++) {
         for (let x = 0; x < this.WIDTH; x++) {
@@ -138,7 +139,8 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
       }
-    }
+    },
+
     _win(cells) {
       return cells.every(
         ([y, x]) =>
@@ -148,18 +150,19 @@ document.addEventListener('DOMContentLoaded', () => {
           x < this.WIDTH &&
           this.board[y][x] === this.activePlayer
       );
-    }
+    },
+
     endGame(msg) {
       alert(msg);
-    }
+    },
+
     resetGame() {
       this.board.forEach((row) => row.fill(null));
       this.gamePieces = document.querySelectorAll('.piece');
       this.gamePieces.forEach((piece) => piece.remove());
       this.activePlayer = 1;
-    }
-  }
+    },
+  };
 
-  const myGame = new Game();
-  myGame.start();
+  game.start();
 });
